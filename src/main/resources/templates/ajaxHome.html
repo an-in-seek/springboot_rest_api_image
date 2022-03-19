@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script type="text/javascript">
+    window.addEventListener("load", () => {
+
+        // 버튼 객체
+        const btnGetImg = document.getElementById("btn_get_img");
+
+        // 이미지 객체
+        const img = document.getElementById("img");
+
+        // 버튼 클릭 이벤트
+        btnGetImg.addEventListener("click", () => {
+            fetch("/img", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json; charset=UTF-8",
+                    }
+                })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.blob();
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then((blob) => {
+                    const src = URL.createObjectURL(blob);
+                    img.src = src;
+                })
+                .catch((error) => console.log("error:", error));
+        });
+    });
+    </script>
+</head>
+<body>
+    <h1>Home</h1>
+    <div>
+        <button id="btn_get_img">REST API 호출해서 이미지 가져오기!</button>
+    </div>
+    <div>
+        <img id="img" alt="이미지가 없는 상태!" width="300px" height="200px">
+    </div>
+</body>
+</html>
